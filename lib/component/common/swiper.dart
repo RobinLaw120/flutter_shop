@@ -15,7 +15,7 @@ class SwiperDiy extends StatelessWidget {
 
     ScreenUtil.init(width: 750, height: 1334, allowFontScaling: false);
     return Container(
-      height: 180,
+      height: 300,
       child: new Swiper(
         itemCount: this.swiperDataList.length,
 //        pagination: SwiperPagination(margin: EdgeInsets.all(10)),

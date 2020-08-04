@@ -38,9 +38,6 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-//  ScrollController _scrollController =
-//  new ScrollController(keepScrollOffset: true);
-
   @override
   // ignore: must_call_super
   void initState() {

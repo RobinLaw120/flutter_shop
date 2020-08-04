@@ -16,7 +16,7 @@ class RecommendNav extends StatelessWidget {
               // Image.network(value['image'],fit: BoxFit.fill,),
               Container(
                 width: 80,
-                height: 60,
+                height: 80,
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(
                     value['image'],
@@ -30,19 +30,6 @@ class RecommendNav extends StatelessWidget {
     return tempList.toList();
   }
 
-  // Widget _getRecommendListData(context, index){
-  //   return Column(
-  //     // mainAxisAlignment: MainAxisAlignment.center,
-  //     children: <Widget>[
-  //       Container(
-  //         height: 150,
-  //         child: Image.network('${recommendNav[index]['image']}'),
-  //       ),
-  //       Text(recommendNav[index]['title'],)
-  //     ],
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,15 +40,5 @@ class RecommendNav extends StatelessWidget {
         children: this._getListData(),
       ),
     );
-    // return Container(
-    // padding: EdgeInsets.all(10),
-    // child: Row(crossAxisAlignment: CrossAxisAlignment.center,children: this._getListData(),),
-    //   child: ListView.builder(
-    //     padding: EdgeInsets.all(20),
-    //     scrollDirection: Axis.horizontal,
-    //     itemCount: recommendNav.length,
-    //     itemBuilder: this._getRecommendListData,
-    // ),
-    // );
   }
 }
