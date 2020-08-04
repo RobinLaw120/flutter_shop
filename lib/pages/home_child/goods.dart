@@ -7,8 +7,6 @@ class GoodsList extends StatelessWidget{
   String iid;
 
   GoodsList({Key key,this.goodsListData}):super(key: key);
-
-
   List<Widget> _getGoods(context){
     var tempList =  goodsListData.map((value){
           return InkWell(
