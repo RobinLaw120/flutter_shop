@@ -26,6 +26,7 @@ dependencies:
   dio: ^3.0.9
   flutter_swiper: ^1.1.6
   flutter_screenutil: ^2.2.0
+  font_awesome_flutter: ^8.8.1
 
 dev_dependencies:
   flutter_test:

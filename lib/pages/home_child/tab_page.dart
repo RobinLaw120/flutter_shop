@@ -7,7 +7,6 @@ import 'goods.dart';
 class TabPage extends StatefulWidget {
   var good;
   String type;
-
   TabPage({this.good, this.type});
 
   @override

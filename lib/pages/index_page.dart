@@ -4,6 +4,7 @@ import './home_page.dart';
 import './category_page.dart';
 import './cart_page.dart';
 import './member_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class IndexPage extends StatefulWidget {
   @override
@@ -15,19 +16,19 @@ class _IndexPageState extends State<IndexPage> {
 
   final List<BottomNavigationBarItem> bottomTabs = [
     BottomNavigationBarItem(
-      icon: Icon(CupertinoIcons.home),
+      icon: Icon(FontAwesomeIcons.home),
       title: Text('首页'),
       ),
       BottomNavigationBarItem(
-      icon: Icon(CupertinoIcons.search),
+      icon: Icon(FontAwesomeIcons.search),
       title: Text('分类'),
       ),
       BottomNavigationBarItem(
-      icon: Icon(CupertinoIcons.shopping_cart),
+      icon: Icon(FontAwesomeIcons.shoppingBag),
       title: Text('购物车'),
       ),
       BottomNavigationBarItem(
-      icon: Icon(CupertinoIcons.profile_circled),
+      icon: Icon(FontAwesomeIcons.personBooth),
       title: Text('个人中心'),
       ),
   ];

@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage>
 
   void getHomeTypeGoods(String type) {
     getHomeGoods(type, this.goods[type]['page']).then((value) {
-//      print(value);
       setState(() {
         this.goods[type]['list'].addAll((value['data']['list']).cast());
         this.goods[type]['page'] += 1;
