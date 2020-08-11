@@ -51,3 +51,16 @@ Future getGoodsDeatilByIid(String iid) async{
     return print('error');
   }
 }
+
+Future getDetailRecommend() async{
+  try{
+    response = await dio.get(servicePath['detailRecommend']);
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception('接口出现异常');
+    }
+  }catch(e){
+    return print('error');
+  }
+}

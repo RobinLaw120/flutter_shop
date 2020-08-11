@@ -7,6 +7,7 @@ import 'goods.dart';
 class TabPage extends StatefulWidget {
   var good;
   String type;
+
   TabPage({this.good, this.type});
 
   @override
@@ -55,23 +56,21 @@ class _TabPageState extends State<TabPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Scrollbar(
-        child: ListView(
-          padding: EdgeInsets.all(0),
-          reverse: false,
-          physics: AlwaysScrollableScrollPhysics(),
-          addAutomaticKeepAlives: true,
-          controller: this._scrollController,
-          children: <Widget>[
-            TopViewPage(),
-            SizedBox(
-              height: 10,
-            ),
-            GoodsList(
-              goodsListData: widget.good['list'],
-            ),
-          ],
-        ),
+      body: ListView(
+        padding: EdgeInsets.all(0),
+        reverse: false,
+        physics: AlwaysScrollableScrollPhysics(),
+        addAutomaticKeepAlives: true,
+        controller: this._scrollController,
+        children: <Widget>[
+          TopViewPage(),
+          SizedBox(
+            height: 10,
+          ),
+          GoodsList(
+            goodsListData: widget.good['list'],
+          ),
+        ],
       ),
       floatingActionButton: !showToTopBtn
           ? null
@@ -91,6 +90,7 @@ class _TabPageState extends State<TabPage>
             ),
     );
   }
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;

@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(width: 750, height: 1334, allowFontScaling: false);
+    ScreenUtil.init(width: 720, height: 1280, allowFontScaling: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan,

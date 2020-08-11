@@ -13,9 +13,9 @@ class SwiperDiy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    ScreenUtil.init(width: 750, height: 1334, allowFontScaling: false);
+    ScreenUtil.init(width: 720, height: 1280, allowFontScaling: false);
     return Container(
-      height: 300,
+      height: ScreenUtil().setHeight(350),
       child: new Swiper(
         itemCount: this.swiperDataList.length,
 //        pagination: SwiperPagination(margin: EdgeInsets.all(10)),
@@ -25,7 +25,7 @@ class SwiperDiy extends StatelessWidget {
             width: ScreenUtil.screenWidth,
             child: Image.network(
             "${swiperDataList[index]['image']}",
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
           ),) : Image.network("https:" + swiperDataList[index], fit: BoxFit.cover,);
         },
       ),

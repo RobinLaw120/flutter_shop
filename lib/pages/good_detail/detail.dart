@@ -5,9 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_shop/component/common/myPaint.dart';
+import 'package:flutter_shop/component/content/bottomTab.dart';
 import 'package:flutter_shop/pages/good_detail/child_detail/good_baseInfo.dart';
 import 'package:flutter_shop/pages/good_detail/child_detail/show_detail.dart';
 import 'package:flutter_shop/pages/good_detail/child_detail/store_info.dart';
+import 'package:flutter_shop/pages/home_child/goods.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_shop/component/common/swiper.dart';
 import 'package:flutter_screenutil/screenutil.dart';
@@ -28,6 +30,9 @@ class _DetailPageState extends State<DetailPage> {
   int isSelectOrShowIndex = 0;
   Color titleColor = Colors.black;
 
+  var recommends;
+
+  bool showToTopBtn = false;
 
   bool isSelected1 = true;
   bool isSelected2 = false;
@@ -38,6 +43,17 @@ class _DetailPageState extends State<DetailPage> {
   // ignore: must_call_super
   void initState() {
     print(widget.arguments['iid']);
+    _scrollController.addListener(() {
+      if (_scrollController.offset < 1000 && showToTopBtn) {
+        setState(() {
+          showToTopBtn = false;
+        });
+      } else if (_scrollController.offset >= 1000 && showToTopBtn == false) {
+        setState(() {
+          showToTopBtn = true;
+        });
+      }
+      });
   }
 
   void selectGoods() {
@@ -68,11 +84,45 @@ class _DetailPageState extends State<DetailPage> {
     this.isSelected4 = true;
   }
 
+  List getTables(List tables){
+    var tablesList = tables.map((values){
+      return TableRow(children: getTablesRow(values),);
+    });
+    return tablesList.toList();
+  }
+  
+  List getTablesRow(List rows){
+    var rowList = rows.map((values){
+      return SizedBox(
+        height: 40,
+        child: Text(values, style: TextStyle(fontSize: ScreenUtil().setSp(24, allowFontScalingSelf: true),),),
+      );
+    });
+    return rowList.toList();
+  }
+
+  List getSetTables(List sets){
+    var setList = sets.map((values){
+      return TableRow(children: [
+        SizedBox(
+          height: 40,
+          child: Text(values['key'], style: TextStyle(fontSize: ScreenUtil().setSp(24, allowFontScalingSelf: true),),),
+        ),
+        SizedBox(
+          height: 40,
+          child: Text(values['value'], overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: ScreenUtil().setSp(24, allowFontScalingSelf: true),color: Colors.pink),),
+        ),
+
+      ]);
+    });
+    return setList.toList();
+  }
+
 
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(width: 750, height: 1334, allowFontScaling: false);
+    ScreenUtil.init(width: 720, height: 1280, allowFontScaling: false);
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -169,50 +219,66 @@ class _DetailPageState extends State<DetailPage> {
               var data = snapshot.data['result'];
               return Container(
                 width: ScreenUtil.screenWidth,
-                child: Scrollbar(
+                child: ListView(
                   controller: this._scrollController,
-                  child: ListView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    addAutomaticKeepAlives: true,
-                    children: <Widget>[
-                      //轮播图
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: SwiperDiy(
-                          swiperDataList: data['itemInfo']['topImages'],
-                        ),
+                  physics: AlwaysScrollableScrollPhysics(),
+                  addAutomaticKeepAlives: true,
+                  children: <Widget>[
+                    //轮播图
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: SwiperDiy(
+                        swiperDataList: data['itemInfo']['topImages'],
                       ),
-                      //商品基本信息
-                      GoodBaseInfoPage(data: data,),
-                      //店铺详情
-                      StoreInfoPage(data: data,),
-                      //商品展示详情
+                    ),
+                    //商品基本信息
+                    GoodBaseInfoPage(
+                      data: data,
+                    ),
+                    //店铺详情
+                    StoreInfoPage(
+                      data: data,
+                    ),
+                    //商品展示详情
 //                      Text('商品详情',style: TextStyle(fontSize: ScreenUtil().setSp(26, allowFontScalingSelf: true),),),
-                      Container(
-                        child: ShowDetailPage(dataList: data['detailInfo']['detailImage'][0]['list'],),
+                    Container(
+                      child: ShowDetailPage(
+                        dataList: data['detailInfo']['detailImage'][0]['list'],
                       ),
-                      Container(
-                        child: DataTable(
-                          columns: [
-                            DataColumn(label: Text('尺码')),
-                            DataColumn(label: Text('S')),
-                            DataColumn(label: Text('M')),
-                            DataColumn(label: Text('L'))
-                          ],
-                          rows: [
-                            DataRow(
-                              cells: [
-                                DataCell(Text('胸围')),
-                                DataCell(Text('100')),
-                                DataCell(Text('104')),
-                                DataCell(Text('108')),
-                              ]
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    //商品参数
+                    Container(
+                      color: Colors.white,
+                      child: Table(
+                        children: getTables(data['itemParams']['rule']['tables'][0]),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: Table(
+                        columnWidths:{
+                          0: FixedColumnWidth(ScreenUtil().setWidth(0)),
+                          1: FixedColumnWidth(ScreenUtil().setWidth(380))
+                        },
+                        children: getSetTables(data['itemParams']['info']['set']),
+                      ),
+                    ),
+                    Container(
+                      child: FutureBuilder(
+                        future: getDetailRecommend(),
+                        builder: (context, snapshot){
+                          if (snapshot.hasData){
+                            var data = snapshot.data['data'];
+                            return GoodsList(goodsListData: data['list'],);
+                          }else{
+                            return Center(
+                              child: Text('正在加载。。。'),
+                            );
+                          }
+                        },
+                      ),
+                    )
+                  ],
                 ),
               );
             } else {
@@ -222,6 +288,16 @@ class _DetailPageState extends State<DetailPage> {
             }
           },
         ),
+      ),
+      bottomNavigationBar: BottomTabPage(),
+      floatingActionButton: !showToTopBtn
+          ? null
+          : FloatingActionButton(
+        child: Icon(Icons.arrow_upward),
+        onPressed: () {
+          this._scrollController.animateTo(.0,
+              duration: Duration(milliseconds: 500), curve: Curves.ease);
+        },
       ),
     );
   }
