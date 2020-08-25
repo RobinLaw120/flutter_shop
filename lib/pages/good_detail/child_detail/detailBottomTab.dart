@@ -1,10 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+import 'package:flutter_shop/provider/CartProvider.dart';
+import 'package:provide/provide.dart';
 
 class BottomTabPage extends StatelessWidget{
+  var goodId,goodName,count,price,image;
+
+  BottomTabPage({this.goodId, this.goodName, this.image, this.price, this.count = 1});
+
+
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(width: 720, height: 1280, allowFontScaling: false);
     return Container(
       decoration:BoxDecoration(
           color: Colors.white,
@@ -58,7 +66,9 @@ class BottomTabPage extends StatelessWidget{
                   child: RaisedButton(
                     color: Colors.cyan,
                     child: Text('加入购物车', style: TextStyle(fontSize: ScreenUtil().setSp(24, allowFontScalingSelf: true)),),
-                    onPressed: (){},
+                    onPressed: () async{
+                      await Provide.value<CartProvider>(context).save(goodId, goodName, count, price, image);
+                    },
                   ),
                 ),
                 Container(
@@ -68,7 +78,9 @@ class BottomTabPage extends StatelessWidget{
                   child: RaisedButton(
                     color: Colors.redAccent,
                     child: Text('购买', style: TextStyle(fontSize: ScreenUtil().setSp(24, allowFontScalingSelf: true), color: Colors.white),),
-                    onPressed: (){},
+                    onPressed: () async{
+                      await Provide.value<CartProvider>(context).remove(goodId);
+                    },
                   ),
                 )
               ],

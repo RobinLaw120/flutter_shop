@@ -27,6 +27,8 @@ dependencies:
   flutter_swiper: ^1.1.6
   flutter_screenutil: ^2.2.0
   font_awesome_flutter: ^8.8.1
+  provide: ^1.0.2
+  shared_preferences: ^0.5.8
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +45,12 @@ flutter:
     - images/server.png
     - images/store.png
     - images/collection.png
+    - images/background.jpg
+    - images/alipayIcon.png
+    - images/wechatIcon.png
+    - images/qqIcon.png
+    - images/logo.png
+    - images/taobao.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

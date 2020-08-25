@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_shop/component/common/myPaint.dart';
-import 'package:flutter_shop/component/content/bottomTab.dart';
+import 'file:///D:/Files/VScodeWorkSpace/flutter_shop/lib/pages/good_detail/child_detail/detailBottomTab.dart';
 import 'package:flutter_shop/pages/good_detail/child_detail/good_baseInfo.dart';
 import 'package:flutter_shop/pages/good_detail/child_detail/show_detail.dart';
 import 'package:flutter_shop/pages/good_detail/child_detail/store_info.dart';
@@ -27,6 +27,9 @@ class _DetailPageState extends State<DetailPage> {
   ScrollController _scrollController =
       new ScrollController(keepScrollOffset: true);
 
+  var dataInfo;
+
+  var goodId,goodName,count,price,image;
   int isSelectOrShowIndex = 0;
   Color titleColor = Colors.black;
 
@@ -39,9 +42,24 @@ class _DetailPageState extends State<DetailPage> {
   bool isSelected3 = false;
   bool isSelected4 = false;
 
+
+  void getInfo(String iid) async{
+    await getGoodsDeatilByIid(iid).then((value){
+      setState(() {
+        this.dataInfo = value['result']['itemInfo'];
+      });
+    });
+    this.goodName = dataInfo['title'];
+    this.price = dataInfo['lowNowPrice'];
+    this.image = dataInfo['topImages'][0];
+//    print(dataInfo);
+  }
+
   @override
   // ignore: must_call_super
   void initState() {
+
+    getInfo(widget.arguments['iid']);
     print(widget.arguments['iid']);
     _scrollController.addListener(() {
       if (_scrollController.offset < 1000 && showToTopBtn) {
@@ -117,7 +135,6 @@ class _DetailPageState extends State<DetailPage> {
     });
     return setList.toList();
   }
-
 
 
   @override
@@ -272,7 +289,7 @@ class _DetailPageState extends State<DetailPage> {
                             return GoodsList(goodsListData: data['list'],);
                           }else{
                             return Center(
-                              child: Text('正在加载。。。'),
+                              child: CircularProgressIndicator(),
                             );
                           }
                         },
@@ -283,13 +300,18 @@ class _DetailPageState extends State<DetailPage> {
               );
             } else {
               return Center(
-                child: Text('加载中。。。'),
+                child: CircularProgressIndicator(),
               );
             }
           },
         ),
       ),
-      bottomNavigationBar: BottomTabPage(),
+      bottomNavigationBar: BottomTabPage(
+        goodId: widget.arguments['iid'],
+        goodName: this.goodName,
+        price: this.price,
+        image: this.image,
+      ),
       floatingActionButton: !showToTopBtn
           ? null
           : FloatingActionButton(

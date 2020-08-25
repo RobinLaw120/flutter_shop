@@ -1,14 +1,15 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_shop/pages/good_detail/detail.dart';
 
 import 'package:flutter_shop/pages/home_page.dart';
+import 'package:flutter_shop/pages/index_page.dart';
 
 
 final routes = {
   '/home': (context) => HomePage(),
-  '/detail': (context, {arguments}) => DetailPage(arguments: arguments,)
+  '/detail': (context, {arguments}) => DetailPage(arguments: arguments,),
+  '/index': (context) => IndexPage(),
 };
 
 // ignore: top_level_function_literal_block

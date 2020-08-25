@@ -35,7 +35,7 @@ class TopViewPage extends StatelessWidget{
             );
           } else {
             return Center(
-              child: Text('加载中。。。'),
+              child: CircularProgressIndicator(),
             );
           }
         },
