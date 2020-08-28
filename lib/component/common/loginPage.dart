@@ -1,9 +1,77 @@
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/screenutil.dart';
+
+
+//class AnimatedLogo extends AnimatedWidget{
+//  AnimatedLogo({Key key, Animation<double> animation}) : super(key:key, listenable: animation);
+//  @override
+//  Widget build(BuildContext context) {
+//    final Animation<double> animation = listenable;
+//    return SizedBox(
+//      height: ScreenUtil().setHeight(animation.value),
+//      width: ScreenUtil().setHeight(animation.value),
+//      child: Image(
+//        image: AssetImage("images/logo.png"),fit: BoxFit.cover,
+//      ),
+//    );
+//  }
+//
+//}
+
+bool _first = true;
+
+class GrowTrasition extends StatelessWidget{
+  final Widget child;
+  final Animation<double> animation;
+
+  GrowTrasition({this.child,this.animation});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation: animation,
+        child: child,//构造函数传入
+        builder: (BuildContext context, Widget child){
+          return Container(
+            height: ScreenUtil().setHeight(animation.value),
+            width: ScreenUtil().setWidth(animation.value),
+            child: child,
+          );
+        },
+    );
+  }
+
+}
+
+class AnimatedLogo extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Image(
+        image: AssetImage("images/logo.png"),fit: BoxFit.cover,
+      ),
+//      child: AnimatedPhysicalModel(
+//        duration: Duration(milliseconds: 500),
+//        curve: Curves.fastOutSlowIn,
+//        elevation: _first ? 0 : 4.0,
+//        shape: BoxShape.circle,
+//        shadowColor: Colors.grey,
+//        color: Colors.transparent,
+//        borderRadius: _first
+//          ? BorderRadius.all(Radius.circular(0))
+//          : BorderRadius.all(Radius.circular(8)),
+//        child: Image(
+//          image: AssetImage("images/logo.png"),fit: BoxFit.cover,
+//        ),
+//      ),
+    );
+  }
+
+}
+
 
 class LoginPage extends StatefulWidget{
   @override
@@ -13,22 +81,26 @@ class LoginPage extends StatefulWidget{
 
 }
 
-class _LoginPageState extends State<LoginPage>{
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin{
+  Animation<double> _animation;
+  AnimationController _animationController;
+
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _verCodeController = TextEditingController();
-
   Widget getLoginComp(){
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SizedBox(
-          height: ScreenUtil().setHeight(200),
-          width: ScreenUtil().setHeight(200),
-          child: Image(
-            image: AssetImage("images/logo.png"),fit: BoxFit.cover,
-          ),
-        ),
+        GrowTrasition(child: AnimatedLogo(), animation: _animation,),
+//        AnimatedLogo(animation: _animation,),
+//        SizedBox(
+//          height: ScreenUtil().setHeight(_animation.value),
+//          width: ScreenUtil().setHeight(_animation.value),
+//          child: Image(
+//            image: AssetImage("images/logo.png"),fit: BoxFit.cover,
+//          ),
+//        ),
         TextField(
           controller: _userNameController,
           decoration: InputDecoration(
@@ -169,5 +241,44 @@ class _LoginPageState extends State<LoginPage>{
       ),
     );
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 2000), vsync: this
+    );
+    //vurveAnimation继承了AnimationController
+    final CurvedAnimation curve = new CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
+    _animation = new Tween(begin:0.0, end: 200.0 ).animate(curve)
+    ..addListener(() {
+      setState(() {
+
+      });
+    })
+//      监听动画状态
+    ..addStatusListener((status) {
+      if(status == AnimationStatus.completed){
+        _first = false;
+      }
+    });
+    _animationController.forward();
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
 
 }
